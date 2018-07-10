@@ -1,13 +1,12 @@
 {
   "name": "mofron-comp-prjtop",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "project top component for mofron",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "mofron-comp-appbase" : "",
     "mofron-effect-center" : "",
     "mofron-effect-blur" : "",
     "mofron-comp-bgtext" : ""
