@@ -39,24 +39,18 @@ mf.comp.Prjtop = class extends mf.Component{
     initDomConts () {
         try {
             super.initDomConts();
-            this.target().style({
-                'position' : 'relative'
-            });
+            this.target().style({ 'position' : 'relative' });
             
-            let cnt_ara = new mf.Dom({
-                tag       : 'div',
-                component : this,
-                style     : {
+            let cnt_ara = new mf.Component({
+                style: {  
                     'position' : 'absolute',
                     'top'      : '0px',
                     'width'    : '100%'
-                },
-                //child : [ this.text() ]
+                }
             });
+            this.image().option({ child: [cnt_ara] });
             this.child([this.image()]);
-            this.target().addChild(cnt_ara);
-            this.target(cnt_ara);
-            
+            this.target(cnt_ara.target());
             this.child([this.text(),this.button()]);
             
             this.height(window.innerHeight  + 'px');
@@ -68,22 +62,13 @@ mf.comp.Prjtop = class extends mf.Component{
     
     image (prm) {
         try {
-            if (undefined === prm) {
-                /* getter */
-                if (undefined === this.m_image) {
-                    this.image(new Image({ visible : false }));
-                }
-                return this.m_image;
+            let ret = this.innerComp('image', prm, Image);
+            if (undefined !== prm) {
+                prm.option({
+                    effect: [new Hrzpos('center')], visible : false
+                });
             }
-            /* setter */
-            if (true !== mf.func.isInclude(prm, 'Image')) {
-                throw new Error('invalid parameter');
-            }
-            prm.execOption({effect : [new Hrzpos('center')]});
-            if (undefined !== this.m_image) { 
-                this.updChild(this.m_image, prm);
-            }
-            this.m_image = prm;
+            return ret;
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -92,29 +77,16 @@ mf.comp.Prjtop = class extends mf.Component{
     
     text (prm) {
         try {
-            if (undefined === prm) {
-                /* getter */
-                if (undefined === this.m_text) {
-                    this.text(new Text({ visible : false }));
-                }
-                return this.m_text;
-            }
-            /* setter */
             if ('string' === typeof prm) {
-                prm = new Text(prm);
+                this.text().option({ text: prm });
+                return;
+            } else if (true === mf.func.isComp(prm, 'Text')) {
+                prm.option({
+                    size: '0.5rem',
+                    effect : [ new Hrzpos('center'), new Vrtpos('center', '-15%') ]
+                });
             }
-            if (true !== mf.func.isInclude(prm, 'Text')) {
-                throw new Error('invalid parameter');
-            }
-            
-            prm.execOption({
-                size   : '0.5rem',
-                effect : [ new Hrzpos('center'), new Vrtpos('center', '-15%') ]
-            });
-            if (undefined !== this.m_text) {
-                this.updChild(this.m_text, prm);
-            }
-            this.m_text = prm;
+            return this.innerComp('text', prm, Text);
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -123,30 +95,14 @@ mf.comp.Prjtop = class extends mf.Component{
     
     button (prm) {
         try {
-            if (undefined === prm) {
-                /* getter */
-                if (undefined === this.m_button) {
-                    this.button(new Button({ visible : false }));
-                }
-                return this.m_button;
+            let ret = this.innerComp('button', prm, Button);
+            if (undefined !== prm) {
+                prm.execOption({
+                    size: ['2rem', '0.4rem'], visible: false,
+                    effect : [ new Hrzpos('center'), new Vrtpos('bottom', '40%') ]
+                });
             }
-            /* setter */
-            if ('string' === typeof prm) {
-                prm = new Button(prm);
-            }
-            if (true !== mf.func.isInclude(prm, 'Button')) {
-                throw new Error('invalid parameter');
-            }
-            
-            prm.execOption({
-                size   : new mf.Param('2rem', '0.4rem'),
-                effect : [ new Hrzpos('center'), new Vrtpos('bottom', '40%') ]
-            });
-            
-            if (undefined !== this.m_button) {
-                this.updChild(this.m_button, prm);
-            }
-            this.m_button = prm;
+            return ret;
         } catch (e) {
             console.error(e.stack);
             throw e;
