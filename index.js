@@ -41,13 +41,7 @@ mf.comp.Prjtop = class extends mf.Component{
             super.initDomConts();
             this.target().style({ 'position' : 'relative' });
             
-            let cnt_ara = new mf.Component({
-                style: {  
-                    'position' : 'absolute',
-                    'top'      : '0px',
-                    'width'    : '100%'
-                }
-            });
+            let cnt_ara = new mf.Component({ style: { 'width' : '100%' } });
             this.image().option({ child: [cnt_ara] });
             this.child([this.image()]);
             this.target(cnt_ara.target());
@@ -83,7 +77,10 @@ mf.comp.Prjtop = class extends mf.Component{
             } else if (true === mf.func.isComp(prm, 'Text')) {
                 prm.option({
                     size: '0.5rem',
-                    effect : [ new Hrzpos('center'), new Vrtpos('center', '-15%') ]
+                    effect : [
+                        new Hrzpos('center'),
+                        new Vrtpos({ type: 'center', offset:'-15%', contsIndex: 1 })
+                    ]
                 });
             }
             return this.innerComp('text', prm, Text);
@@ -95,14 +92,16 @@ mf.comp.Prjtop = class extends mf.Component{
     
     button (prm) {
         try {
-            let ret = this.innerComp('button', prm, Button);
-            if (undefined !== prm) {
-                prm.execOption({
+            if (true === mf.func.isComp(prm)) {
+                prm.option({
                     size: ['2rem', '0.4rem'], visible: false,
-                    effect : [ new Hrzpos('center'), new Vrtpos('bottom', '40%') ]
+                    effect: [ new Hrzpos({ type: 'center', contsIndex: 2 }), new Vrtpos('bottom', '30%') ]
                 });
+            } else if ('string' === typeof prm) {
+                this.button().option({ text: prm, visible: true });
+                return;
             }
-            return ret;
+            return this.innerComp('button', prm, Button);
         } catch (e) {
             console.error(e.stack);
             throw e;
