@@ -2,14 +2,18 @@
  * @file   mofron-comp-prjtop/index.js
  * @author simpart
  */
-const mf     = require('mofron');
-const Button = require('mofron-comp-button');
-const Hriz   = require('mofron-layout-horizon');
-const Hrzpos = require('mofron-effect-hrzpos');
-const Vrtpos = require('mofron-effect-vrtpos');
-const Text   = require('mofron-comp-bgtext');
-const Image  = require('mofron-comp-image');
+const mf      = require("mofron");
+const Button  = require("mofron-comp-button");
+const Hriz    = require("mofron-layout-horizon");
+const Hrzpos  = require("mofron-effect-hrzpos");
+const Vrtpos  = require("mofron-effect-vrtpos");
+const SynWhei = require("mofron-effect-synwhei");
+const Blur    = require("mofron-effect-blur");
+const Link    = require("mofron-event-link");
+const Text    = require("mofron-comp-bgtext");
+const Image   = require("mofron-comp-image");
 
+let mod_name = "Prjtop";
 /**
  * @class mofron.comp.prjtop
  * @brief project top contents component for mofron
@@ -23,8 +27,8 @@ mf.comp.Prjtop = class extends mf.Component{
     constructor (po) {
         try {
             super();
-            this.name('Prjtop');
-            this.prmMap('text');
+            this.name(mod_name);
+            this.prmMap("text");
             this.prmOpt(po);
         } catch (e) {
             console.error(e.stack);
@@ -47,22 +51,32 @@ mf.comp.Prjtop = class extends mf.Component{
             this.target(cnt_ara.target());
             this.child([this.text(),this.button()]);
             
-            this.height(window.innerHeight  + 'px');
+            this.effect([new SynWhei({ tag: mod_name })]);
+            this.style({ position:"absolute", top: "0px" });
         } catch (e) {
             console.error(e.stack);
             throw e;
         }
     }
     
-    image (prm) {
+    
+    image (prm, blr) {
         try {
-            let ret = this.innerComp('image', prm, Image);
-            if (undefined !== prm) {
+            if (true === mf.func.isInclude(prm, "Image")) {
                 prm.option({
-                    effect: [new Hrzpos('center')], visible : false
+                    width: "100%",
+                    effect: [
+                        new Hrzpos('center'),
+                        new SynWhei({ tag: mod_name }),
+                        new Blur({ tag: mod_name, value: (undefined === blr) ? '0rem' : blr })
+                    ]
                 });
+            } else if ("string" === typeof prm) {
+                this.image().path(prm);
+                this.image().effect(["Blur", mod_name]).value(blr);
+                return;
             }
-            return ret;
+            return this.innerComp('image', prm, Image);
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -90,8 +104,11 @@ mf.comp.Prjtop = class extends mf.Component{
         }
     }
     
-    button (prm) {
+    button (prm, pth) {
         try {
+            if (undefined !== pth) {
+                this.button().event(new Link(pth));
+            }
             if (true === mf.func.isComp(prm)) {
                 prm.option({
                     size: ['2rem', '0.4rem'], visible: false,
@@ -106,6 +123,16 @@ mf.comp.Prjtop = class extends mf.Component{
             console.error(e.stack);
             throw e;
         }
+    }
+    
+    offset (prm) {
+        try {
+            this.effect(["Synwhei", mod_name]).offset(prm);
+            this.image().effect(["Synwhei", mod_name]).offset(prm);
+        } catch (e) {
+            console.error(e.stack);
+            throw e;
+        } 
     }
 }
 module.exports = mf.comp.Prjtop;

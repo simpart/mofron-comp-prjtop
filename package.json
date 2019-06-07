@@ -7,10 +7,15 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "mofron-comp-button" : "",
     "mofron-layout-horizon" : "",
-    "mofron-comp-bgtext" : "",
+    "mofron-effect-hrzpos" : "",
     "mofron-effect-vrtpos" : "",
-    "mofron-effect-hrzpos" : ""
+    "mofron-effect-synwhei" : "",
+    "mofron-effect-blur" : "",
+    "mofron-event-link" : "",
+    "mofron-comp-bgtext" : "",
+    "mofron-comp-image" : ""
   },
   "repository": {
     "type": "git",
