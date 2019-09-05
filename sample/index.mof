@@ -1,0 +1,10 @@
+<require>
+    <tag module="mofron-comp-appbase">AppBase</tag>
+    <tag module="mofron-comp-prjtop">PrjTop</tag>
+</require>
+
+<AppBase>
+    <PrjTop text="Project Top Page">
+        <button>Get Started,"./"</button>
+    </PrjTop>
+</AppBase>
