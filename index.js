@@ -135,7 +135,7 @@ mf.comp.Prjtop = class extends mf.Component{
                     size: '0.5rem',
 		    style: {
 		        "position" : "relative",
-			"z-index"  : "400"
+			"z-index"  : "500"
 		    },
                     effect : [
                         new Hrzpos('center'),
@@ -188,6 +188,7 @@ mf.comp.Prjtop = class extends mf.Component{
      * image offset
      * 
      * @param (string (size)) offset size
+     * @return (string (size)) offset size
      * @type parameter
      */
     offset (prm) {
