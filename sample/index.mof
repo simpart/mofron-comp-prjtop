@@ -1,10 +1,10 @@
 <require>
-    <tag module="mofron-comp-appbase">AppBase</tag>
-    <tag module="mofron-comp-prjtop">PrjTop</tag>
+    <tag load="mofron-comp-appbase">AppBase</tag>
+    <tag load="mofron-comp-prjtop">PrjTop</tag>
 </require>
 
 <AppBase>
     <PrjTop text="Project Top Page">
-        <button>Get Started,"./"</button>
+        <button url="./">Get Started</button>
     </PrjTop>
 </AppBase>

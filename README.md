@@ -14,13 +14,13 @@ npm install mofron mofron-comp-prjtop
 # Sample
 ```html
 <require>
-    <tag module="mofron-comp-appbase">AppBase</tag>
-    <tag module="mofron-comp-prjtop">PrjTop</tag>
+    <tag load="mofron-comp-appbase">AppBase</tag>
+    <tag load="mofron-comp-prjtop">PrjTop</tag>
 </require>
 
 <AppBase>
     <PrjTop text="Project Top Page">
-        <button>Get Started,"./"</button>
+        <button url="./">Get Started</button>
     </PrjTop>
 </AppBase>
 ```
@@ -28,11 +28,13 @@ npm install mofron mofron-comp-prjtop
 
 |Simple<br>Param | Parameter Name | Type | Description |
 |:--------------:|:---------------|:-----|:------------|
-| | image | string | path to image |
-| | | string (size) | blur size |
-| ◯  | text | string | phrase text |
-| | button | mixed | mofron-comp-button: link component |
+| | image | mixed | string: path to image |
+| | | | mofron-comp-image: replace image component |
+| ◯  | text | mixed | string: phrase text |
+| | | | mofron-comp-text: replace text component |
+| | button | mixed | mofron-comp-button: replace button component |
 | | | | string: button text |
-| | | string | link path |
+| | | associative array | options for buttom component |
+| | | | url: set jump url (default is './') |
 | | offset | string (size) | offset size |
 

@@ -16,7 +16,6 @@ const Link    = require("mofron-event-link");
 const Text    = require("mofron-comp-bgtext");
 const Image   = require("mofron-comp-image");
 
-let mod_name = "Prjtop";
 mf.comp.Prjtop = class extends mf.Component{
     /**
      * initialize component
@@ -29,7 +28,7 @@ mf.comp.Prjtop = class extends mf.Component{
     constructor (po) {
         try {
             super();
-            this.name(mod_name);
+            this.name("Prjtop");
             this.prmMap("text");
             this.prmOpt(po);
         } catch (e) {
@@ -47,70 +46,58 @@ mf.comp.Prjtop = class extends mf.Component{
         try {
             super.initDomConts();
             this.target().style({ 'position' : 'relative' });
-            let topdom = this.target();
-
-            let cnt_ara = new mf.Component({ style: { 'width' : '100%' } });
-            this.image().option({ child: [cnt_ara] });
-            this.child([this.image()]);
-            this.target(cnt_ara.target());
-            this.child([this.text(),this.button()]);
             
-            this.effect([new SynWhei({ tag: mod_name })]);
-            this.style({ position:"absolute", top: "0px" });
+            let cnt_ara = new mf.Component({
+	                      style: { width : "100%", position : "absolute", top: "0px" },
+			      effect: [ new SynWhei({ tag: "Prjtop" }) ],
+			      child: [ this.image(), this.text(), this.button() ]
+			  });
+	    this.image().visible(false);
+	    this.button().visible(false);
+            this.child(cnt_ara);
             
-	    this.height(window.innerHeight + "px");
-	    let prj = this;
-	    this.target().styleListener(
-	        'height',
-		(st1,st2) => {
-		    try {
-		        let hei = mf.func.getSize(st2.height);
-			topdom.style({ "height" : st2.height });
-		        prj.button().style({ "top" : hei.value() * 0.5 + "px" });
-			prj.image().height((hei.value() - 10) + "px");
-		    } catch (e) {
+	    /* sync height */
+	    let tgt_buf = this.target();
+            cnt_ara.target().styleListener(
+                "height",
+                (sl_1,sl_2,sl_3) => {
+                    try { tgt_buf.style(sl_2); } catch (e) {
                         console.error(e.stack);
                         throw e;
-	            }
-		}
-	    );
+                    }
+                }
+            );
+
+	    this.target(cnt_ara.target());
         } catch (e) {
             console.error(e.stack);
             throw e;
         }
     }
-    
+
     /**
      * image config
      * 
-     * @param (string) path to image
-     * @param (string (size)) blur size
-     * @return (mofron-comp-image) image component
+     * @param (mixed) string: path to image
+     *                mofron-comp-image: replace image component
+     * @return (associative array) options image component
      * @type parameter
      */
-    image (prm, blr) {
+    image (prm, opt) {
         try {
-            if (true === mf.func.isInclude(prm, "Image")) {
-                prm.option({
-                    width: "100%",
-		    style: {
-		        "position" : "relative",
-			"z-index"  : "400"
-		    },
-                    effect: [
-                        new Hrzpos('center'),
-                        new Blur({ tag: mod_name, value: (undefined === blr) ? '0rem' : blr })
+            if ("string" === typeof prm) {
+	        opt = (undefined === opt) ? {} : opt;
+		opt["path"]  = prm;
+	        this.image().option(opt)
+		this.image().option({
+		    style: { display : null },
+		    effect: [
+		        new SynHei(this.target().component()),
+			new Hrzpos('center')
                     ]
-                });
-		let o_img = this.m_inncmp["image"];
-		if ( (undefined !== o_img) && (0 < o_img.child().length) ) {
-		    prm.child(o_img.child());
-		}
-            } else if ("string" === typeof prm) {
-                this.image().path(prm);
-                this.image().effect(["Blur", mod_name]).value(blr);
+		});
                 return;
-            }
+	    }
             return this.innerComp('image', prm, Image);
         } catch (e) {
             console.error(e.stack);
@@ -121,28 +108,24 @@ mf.comp.Prjtop = class extends mf.Component{
     /**
      * catchphrase
      * 
-     * @param (string) phrase text
-     * @return (mofron-comp-text) text component
+     * @param (mixed) string: phrase text
+     *                mofron-comp-text: replace text component
+     * @return (associative array) options for text component
      * @type parameter
      */
-    text (prm) {
+    text (prm, opt) {
         try {
-            if ('string' === typeof prm) {
-                this.text().option({ text: prm });
-                return;
-            } else if (true === mf.func.isComp(prm, 'Text')) {
-                prm.option({
-                    size: '0.5rem',
-		    style: {
-		        "position" : "relative",
-			"z-index"  : "500"
-		    },
-                    effect : [
-                        new Hrzpos('center'),
-                        new Vrtpos({ type: 'center', offset:'-15%', contsIndex: 1 })
-                    ]
-                });
-            }
+	    if ('string' === typeof prm) {
+                this.text().option({
+		    text : prm, size: "0.5rem",
+		    style: { "position": "absolute", "z-index": "500" },
+		    effect: [ new Hrzpos('center'), new Vrtpos('center', '-10%')]
+		});
+		if (undefined !== opt) {
+                    this.text().option(opt);
+		}
+		return;
+	    } 
             return this.innerComp('text', prm, Text);
         } catch (e) {
             console.error(e.stack);
@@ -153,30 +136,29 @@ mf.comp.Prjtop = class extends mf.Component{
     /**
      * get start button 
      *
-     * @param (mixed) mofron-comp-button: link component
+     * @param (mixed) mofron-comp-button: replace button component
      *                string: button text
-     * @param (string) link path
+     * @param (associative array) options for buttom component
+     *                            url: set jump url (default is './')
      * @return (mofron-comp-button) button component
      * @type parameter
      */
-    button (prm, pth) {
+    button (prm, opt) {
         try {
-            if (undefined !== pth) {
-                this.button().event(new Link(pth));
-            }
-            if (true === mf.func.isComp(prm)) {
-                prm.option({
-		    style: {
-		        "position" : "relative",
-			"z-index"  : "500",
-		    },
-                    size: ['2rem', '0.4rem'], visible: false,
-                    effect: [ new Hrzpos({ type: 'center', contsIndex: 2 }) ]
-                });
-            } else if ('string' === typeof prm) {
-                this.button().option({ text: prm, visible: true });
-                return;
-            }
+	    if ("string" === typeof prm) {
+	        this.button().option({
+		    text : prm, size: ['2rem', '0.4rem'],
+		    style: { display: null, position: "absolute", bottom: "10%" },
+		    event: new Link({ tag: "Prjtop", url: "./" }),
+		    effect: new Hrzpos('center')
+		});
+		if (undefined !== opt) {
+		    this.button().event({ name: "Link",  tag: "Prjtop" }).url(opt.url, true);
+		    delete opt.url;
+		    this.text().option(opt);
+                }
+		return;
+	    }
             return this.innerComp('button', prm, Button);
         } catch (e) {
             console.error(e.stack);
@@ -193,7 +175,8 @@ mf.comp.Prjtop = class extends mf.Component{
      */
     offset (prm) {
         try {
-	    return this.effect(["Synwhei", mod_name]).offset(prm);
+	    let tgt = { name: "Synwhei", tag: "Prjtop" };
+	    return this.effect(tgt).offset(prm);
 	} catch (e) {
             console.error(e.stack);
             throw e;
