@@ -30,8 +30,10 @@ npm install mofron mofron-comp-prjtop
 |:--------------:|:---------------|:-----|:------------|
 | | image | mixed | string: path to image |
 | | | | mofron-comp-image: replace image component |
+| | | associative array | options image component |
 | ◯  | text | mixed | string: phrase text |
 | | | | mofron-comp-text: replace text component |
+| | | associative array | options for text component |
 | | button | mixed | mofron-comp-button: replace button component |
 | | | | string: button text |
 | | | associative array | options for buttom component |

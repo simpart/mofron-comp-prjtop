@@ -80,7 +80,8 @@ mf.comp.Prjtop = class extends mf.Component{
      * 
      * @param (mixed) string: path to image
      *                mofron-comp-image: replace image component
-     * @return (associative array) options image component
+     * @param (associative array) options image component
+     * @return (mofron-comp-image) image component
      * @type parameter
      */
     image (prm, opt) {
@@ -110,7 +111,8 @@ mf.comp.Prjtop = class extends mf.Component{
      * 
      * @param (mixed) string: phrase text
      *                mofron-comp-text: replace text component
-     * @return (associative array) options for text component
+     * @param (associative array) options for text component
+     * @return (mofron-comp-text) text component for phrase text
      * @type parameter
      */
     text (prm, opt) {
