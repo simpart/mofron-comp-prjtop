@@ -1,7 +1,7 @@
-<require>
+<setting>
     <tag load="mofron-comp-appbase">AppBase</tag>
     <tag load="mofron-comp-prjtop">PrjTop</tag>
-</require>
+</setting>
 
 <AppBase>
     <PrjTop text="Project Top Page">
