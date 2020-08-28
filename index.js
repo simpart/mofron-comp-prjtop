@@ -30,7 +30,7 @@ module.exports = class extends mofron.class.Component {
     constructor (p1) {
         try {
             super();
-            this.name("Prjtop");
+            this.modname("Prjtop");
             this.shortForm("text");
             this.config(p1);
         } catch (e) {
