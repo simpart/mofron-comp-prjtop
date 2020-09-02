@@ -1,6 +1,6 @@
 {
   "name": "mofron-comp-prjtop",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "project top component for mofron",
   "main": "index.js",
   "scripts": {
@@ -8,12 +8,10 @@
   },
   "dependencies": {
     "mofron-comp-button" : "",
-    "mofron-layout-horizon" : "",
     "mofron-effect-hrzpos" : "",
     "mofron-effect-vrtpos" : "",
     "mofron-effect-position" : "",
-    "mofron-effect-synwhei" : "",
-    "mofron-effect-blur" : "",
+    "mofron-effect-synchei" : "",
     "mofron-event-link" : "",
     "mofron-comp-bgtext" : "",
     "mofron-comp-image" : ""
