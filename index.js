@@ -55,7 +55,7 @@ module.exports = class extends mofron.class.Component {
 				  top:"0px", display:"grid"
                               },
 			      effect: [ new SynWhei({ tag: "Prjtop" }) ],
-			      child: [ this.image(), this.text(), this.button() ]
+			      child: [ this.textWrap(), this.image(), this.button() ]
 			  });
 	    this.image().visible(false);
 	    this.button().visible(false);
@@ -93,14 +93,15 @@ module.exports = class extends mofron.class.Component {
     image (prm, opt) {
         try {
             if ("string" === typeof prm) {
-	        opt = (undefined === opt) ? {} : opt;
-		opt["path"]  = prm;
-	        this.image().config(opt)
-		this.image().config({
-		    style: { display :null, position:"absolute" },
+	        this.image().path(prm);
+		if (undefined !== opt) {
+	            this.image().config(opt);
+		}
+                this.image().config({
+		    style: { display:null, position:"absolute" },
 		    effect: [
 		        new Position("center","center"),
-			new SynHei(this.childDom().component())
+                        new SynHei(this.childDom().component())
 		    ]
 		});
                 return;
@@ -111,7 +112,21 @@ module.exports = class extends mofron.class.Component {
             throw e;
         }
     }
+
+
+    textWrap (prm) {
+        try {
+            if (undefined !== prm) {
+                prm.config({ style: { "margin-top" : "0.5rem" } });
+            }
+            return this.innerComp('textWrap', prm, mofron.class.Component);
+        } catch (e) {
+            console.error(e.stack);
+            throw e;
+        }
+    }
     
+
     /**
      * catchphrase
      * 
@@ -121,33 +136,36 @@ module.exports = class extends mofron.class.Component {
      * @return (mofron-comp-text) text component for phrase text
      * @type parameter
      */
-    text () {
+    text (prm, cnf) {
         try {
-	    if (0 === arguments.length) {
-	        /* getter */
-                return this.innerComp("text",undefined,mofron.class.Component);
-	    }
-	    /* setter */
-	    let set = [];
-            for (let aidx in arguments) {
-                if ('string' === typeof arguments[aidx]) {
-                    arguments[aidx] = new Text({ text: arguments[aidx], size:"0.35rem" });
-		}
-		set.push(arguments[aidx]);
-	    }
-            this.innerComp(
-	        "text",
-		new mofron.class.Component({
-		    style: { "margin":"auto", "text-align":"center" },
-		    child: set
-		})
-            );
+            if (undefined === prm) {
+                /* getter */
+                return this.textWrap().child();
+            }
+            /* setter */
+            if (true === Array.isArray(prm)) {
+                for (let pidx in prm) {
+                    this.text(prm[pidx],cnf);
+                }
+                return;
+            } else if ("string" === typeof prm) {
+                prm = new Text(prm);
+            }
+            prm.config({
+                size: "0.5rem",
+                effect: new Hrzpos()
+            });
+
+            if (undefined !== cnf) {
+                prm.config(cnf);
+            }
+            this.textWrap().child(prm);
         } catch (e) {
             console.error(e.stack);
             throw e;
-        }
+	}
     }
-    
+
     /**
      * get start button 
      *
@@ -170,7 +188,6 @@ module.exports = class extends mofron.class.Component {
 		if (undefined !== opt) {
 		    this.button().event({ modname: "Link",  tag: "Prjtop" }).url(opt.url, true);
 		    delete opt.url;
-		    //this.text().config(opt);
                 }
 		return;
 	    }
@@ -180,7 +197,7 @@ module.exports = class extends mofron.class.Component {
             throw e;
         }
     }
-    
+
     /**
      * image offset
      * 
@@ -196,6 +213,29 @@ module.exports = class extends mofron.class.Component {
             console.error(e.stack);
             throw e;
         } 
+    }
+    
+    /**
+     * height setter/getter
+     * 
+     * @param (string (size)) height
+     * @param (key-value) style option
+     * @return (string (size)) height
+     * @type parameter
+     */
+    height (prm,opt) {
+        try {
+            if (undefined !== prm) {
+                let syn = this.effect({ modname:"Synwhei" });
+		if (null !== syn) {
+                    syn.suspend(true);
+		}
+	    }
+	    return super.height(prm,opt);
+	} catch (e) {
+            console.error(e.stack);
+            throw e;
+        }
     }
 }
 /* end of file */
